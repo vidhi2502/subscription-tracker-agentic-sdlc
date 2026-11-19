@@ -45,7 +45,8 @@ process.stdin.on('end', () => {
   if (!fs.existsSync(file)) {
     problems.push(`The report file ${relPath} does not exist.`);
   } else {
-    const text = fs.readFileSync(file, 'utf8');
+        const buf = fs.readFileSync(file);
+    const text = buf[0] === 0xff && buf[1] === 0xfe ? buf.toString('utf16le') : buf.toString('utf8');
     for (const section of REQUIRED_SECTIONS) {
       if (!text.includes(section)) {
         problems.push(`${relPath} is missing the section "${section}".`);
