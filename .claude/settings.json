@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "deny": ["Read(./.env)", "Read(./.env.*)"]
+  },
+  "hooks": {
+    "SubagentStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node .claude/hooks/log.js" }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node .claude/hooks/log.js" },
+          { "type": "command", "command": "node .claude/hooks/require-report.js" }
+        ]
+      }
+    ]
+  }
+}
