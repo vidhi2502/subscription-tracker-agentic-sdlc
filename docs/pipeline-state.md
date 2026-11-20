@@ -3,7 +3,7 @@
 | Stage | Agent | Status | Report | Approved by user |
 |-------|-------|--------|--------|------------------|
 | 1 | requirements-agent | Done | reports/01-requirements-agent-report.md | Yes |
-| 2 | architecture-agent | Pending | reports/02-architecture-agent-report.md | No |
+| 2 | architecture-agent | Done | reports/02-architecture-agent-report.md | Yes |
 | 3 | design-review-agent | Pending | reports/03-design-review-agent-report.md | No |
 | 4 | planning-agent | Pending | reports/04-planning-agent-report.md | No |
 | 5 | implementation-agent | Pending | reports/05-implementation-agent-report.md | No |
