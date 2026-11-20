@@ -9,4 +9,4 @@
 | 5 | implementation-agent | Done | reports/05-implementation-agent-report.md | Yes |
 | 6 | code-review-agent | Done | reports/06-code-review-agent-report.md | Yes |
 | 7 | verification-agent | Done | reports/07-verification-agent-report.md | Yes |
-| 8 | pr-agent | Pending | reports/08-pr-agent-report.md | No |
+| 8 | pr-agent | Done | reports/08-pr-agent-report.md | Yes |
