@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subscription Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <h1>Subscription Tracker</h1>
+
+    <section class="summary" aria-labelledby="total-heading">
+      <h2 id="total-heading">Monthly total</h2>
+      <p id="monthly-total" class="total">₹0.00</p>
+    </section>
+
+    <section aria-labelledby="renewing-heading">
+      <h2 id="renewing-heading">Renewing in the next 7 days</h2>
+      <ul id="renewing-list" class="items"></ul>
+      <p id="renewing-empty" class="empty" hidden>No renewals in the next 7 days.</p>
+    </section>
+
+    <section aria-labelledby="add-heading">
+      <h2 id="add-heading">Add subscription</h2>
+      <form id="add-form">
+        <label>
+          Name
+          <input name="name" type="text" required maxlength="100">
+        </label>
+        <label>
+          Cost (₹)
+          <input name="cost" type="number" required min="0" step="any">
+        </label>
+        <label>
+          Billing cycle
+          <select name="cycle" required>
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+          </select>
+        </label>
+        <label>
+          Next renewal date
+          <input name="renewalDate" type="date" required>
+        </label>
+        <label>
+          Category (optional)
+          <input name="category" type="text" maxlength="50">
+        </label>
+        <button type="submit">Add</button>
+        <p id="form-error" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <section aria-labelledby="list-heading">
+      <h2 id="list-heading">All subscriptions</h2>
+      <ul id="subscription-list" class="items"></ul>
+      <p id="list-empty" class="empty" hidden>No subscriptions yet.</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
