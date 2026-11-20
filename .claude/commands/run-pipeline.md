@@ -33,7 +33,7 @@ Start stage: $ARGUMENTS (if empty, start at stage 1).
 4. Show me a summary of at most 5 lines: what was produced, files created, and any Jira actions.
 5. Update `docs/pipeline-state.md` for this stage (Status: Done).
 6. Ask: "Approve stage N and continue? (yes / changes: <feedback> / stop)" and WAIT.
-   - yes: mark Approved in the state file and go to the next stage.
+   - yes: mark Approved in the state file. Then commit that stage's files if the agent did not (use the commit message from the agent's instructions, with the story key), run `git push`, and go to the next stage.
    - changes: re-invoke the same agent with my feedback, then repeat from step 3.
    - stop: save state and end.
 
