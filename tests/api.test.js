@@ -202,3 +202,40 @@ describe('API', () => {
     });
   });
 });
+
+describe('API with an invalid stored record', () => {
+  let tempDir;
+  let server;
+  let baseUrl;
+
+  before(async () => {
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'subtracker-api-bad-'));
+    const filePath = path.join(tempDir, 'subscriptions.json');
+    const invalidRecord = {
+      id: 'bad-date',
+      name: 'Broken',
+      cost: 10,
+      cycle: 'monthly',
+      renewalDate: '2026-02-30',
+    };
+    fs.writeFileSync(filePath, JSON.stringify({ subscriptions: [invalidRecord] }));
+    const app = createApp({ store: createStore(filePath), today: () => FIXED_TODAY });
+    server = await new Promise((resolve) => {
+      const listening = app.listen(0, '127.0.0.1', () => resolve(listening));
+    });
+    baseUrl = `http://127.0.0.1:${server.address().port}`;
+  });
+
+  after(async () => {
+    await new Promise((resolve) => server.close(resolve));
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  });
+
+  it('still returns the list and summary without a server error', async () => {
+    const list = await fetch(`${baseUrl}/api/subscriptions`);
+    const summary = await fetch(`${baseUrl}/api/summary`);
+    assert.strictEqual(list.status, 200);
+    assert.strictEqual(summary.status, 200);
+    assert.deepStrictEqual((await list.json()).subscriptions, []);
+  });
+});

@@ -93,6 +93,23 @@ describe('store', () => {
       assert.strictEqual(backupFiles().length, 1);
       assert.deepStrictEqual(readFileJson(), { subscriptions: [SUBSCRIPTION] });
     });
+
+    it('skips invalid records, keeps valid ones, and backs up the file before the next write', async () => {
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
+      const invalidRecord = { ...SUBSCRIPTION, id: 'bad-cycle', cycle: 'weekly' };
+      fs.writeFileSync(filePath, JSON.stringify({ subscriptions: [SUBSCRIPTION, invalidRecord] }));
+      const store = createStore(filePath);
+
+      assert.deepStrictEqual(await store.list(), [SUBSCRIPTION]);
+
+      await store.add({ ...SUBSCRIPTION, id: 'sub-2' });
+
+      assert.strictEqual(backupFiles().length, 1);
+      assert.deepStrictEqual(
+        readFileJson().subscriptions.map((item) => item.id),
+        ['sub-1', 'sub-2']
+      );
+    });
   });
 
   describe('add, list and remove', () => {

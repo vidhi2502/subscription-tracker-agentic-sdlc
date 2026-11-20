@@ -3,6 +3,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const calc = require('./calc');
 
 const DEFAULT_FILE_PATH = path.join(__dirname, '..', 'data', 'subscriptions.json');
 
@@ -12,6 +13,11 @@ function emptyDocument() {
 
 function isValidDocument(document) {
   return Boolean(document) && Array.isArray(document.subscriptions);
+}
+
+function isStoredRecord(item) {
+  return typeof item === 'object' && item !== null && typeof item.id === 'string'
+    && calc.findValidationError(item) === null;
 }
 
 function tryParseJson(text) {
@@ -24,10 +30,15 @@ function tryParseJson(text) {
 
 function parseDocument(text) {
   const parsed = tryParseJson(text);
-  if (isValidDocument(parsed)) {
-    return { document: parsed, corrupt: false, missing: false };
+  if (!isValidDocument(parsed)) {
+    return { document: emptyDocument(), corrupt: true, missing: false };
   }
-  return { document: emptyDocument(), corrupt: true, missing: false };
+  const validRecords = parsed.subscriptions.filter(isStoredRecord);
+  return {
+    document: { ...parsed, subscriptions: validRecords },
+    corrupt: validRecords.length !== parsed.subscriptions.length,
+    missing: false,
+  };
 }
 
 async function readDocument(filePath) {
